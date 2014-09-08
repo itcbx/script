@@ -59,15 +59,11 @@ if brew info phpmyadmin | grep "Not installed" >&-; then
 fi
 
 # Configure.
-if [ ! -d "/usr/local/etc/nginx/conf.d/" ]; then
-    mkdir /usr/local/etc/nginx/conf.d/
-fi
-if [ ! -d "/usr/local/etc/nginx/sites-enabled/" ]; then
-    mkdir /usr/local/etc/nginx/sites-enabled/
-fi
-if [ ! -d "/usr/local/etc/nginx/sites-available/" ]; then
-    mkdir /usr/local/etc/nginx/sites-available/
-fi
+mkdir -p /usr/local/etc/nginx/conf.d/
+mkdir -p /usr/local/etc/nginx/sites-enabled/
+mkdir -p /usr/local/etc/nginx/sites-available/
+mkdir -p /usr/local/var/www/default/public_html/
+mkdir -p /usr/local/var/www/default/logs/
 
 cat>/usr/local/etc/nginx/nginx.conf<<EOF
 #user nobody;
@@ -120,7 +116,7 @@ EOF
 cat>/usr/local/etc/nginx/sites-available/default<<EOF
 server {
         listen 80;
-        root /usr/local/var/www;
+        root /usr/local/var/www/default/public_html;
         index index.html index.htm index.php;
         server_name localhost;
              
@@ -128,14 +124,14 @@ server {
                 fastcgi_split_path_info ^(.+.php)(/.+)$;
                 fastcgi_pass 127.0.0.1:9000;
                 fastcgi_index index.php;
-                #fastcgi_param  SCRIPT_FILENAME  /usr/local/var/www$fastcgi_script_name;
+                #fastcgi_param  SCRIPT_FILENAME  /usr/local/var/www/default/public_html$fastcgi_script_name;
                 include fastcgi_params;
                 include fastcgi.conf; 
         }
 
 } 
 EOF
-ln -sfv /usr/local/share/phpmyadmin /usr/local/var/www 
+ln -sfv /usr/local/share/phpmyadmin /usr/local/var/www/default/public_html
 ln -sfv /usr/local/etc/nginx/sites-available/default /usr/local/etc/nginx/sites-enabled/default
 echo "Inorder to lanuch nginx with port 80, you must change the owner of nginx."
 sudo chown root:wheel /usr/local/bin/nginx
