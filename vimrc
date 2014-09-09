@@ -77,7 +77,7 @@ endif
 
 set wildignore=*.swp,*.bak,*.pyc,*.class,.svn
 " 突出显示当前行等
-set cursorcolumn
+" set cursorcolumn
 set cursorline          " 突出显示当前行
 
 
