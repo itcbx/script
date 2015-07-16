@@ -16,7 +16,7 @@ if ! hash brew $1 2>&-; then
 fi
 
 # add more Github repos
-brew tap josegonzalez/homebrew-php
+brew tap homebrew/homebrew-php
 brew tap homebrew/dupes
 # brew update
 
@@ -104,6 +104,15 @@ http {
     gzip_disable "msie6";
 
     ##
+    # Php Settings
+    ##
+    client_max_body_size 20m;
+    index index.php index.html index.htm;
+    upstream php {
+        server 127.0.0.1:9000;
+    }
+
+    ##
     # Virtual Host Configs
     ##
 
@@ -117,12 +126,27 @@ cat>/usr/local/etc/nginx/sites-available/default<<EOF
 server {
         listen 80;
         root /usr/local/var/www/default/public_html;
-        index index.html index.htm index.php;
+        # index index.html index.htm index.php;
         server_name localhost;
-             
+        
+        location = /favicon.ico {
+            log_not_found off;
+            access_log off;
+        }
+
+        location = /robots.txt {
+            allow all;
+            log_not_found off;
+            access_log off;
+        }
+
+        location ~/\. {
+            deny all;
+        }
+
         location ~ \.php$ {
                 fastcgi_split_path_info ^(.+.php)(/.+)$;
-                fastcgi_pass 127.0.0.1:9000;
+                fastcgi_pass php;
                 fastcgi_index index.php;
                 #fastcgi_param  SCRIPT_FILENAME  /usr/local/var/www/default/public_html$fastcgi_script_name;
                 include fastcgi_params;
