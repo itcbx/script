@@ -1,7 +1,7 @@
 "==========================================
 " Author:  itcbx
-" Email: cbx945@gmail.com
-" Web: http://itcbx.com
+" Email: tech@itcbx.com
+" Web: https://blog.itcbx.com
 " ReadMe: README.md
 " Last_modify: 2014-09-08
 " Sections:
